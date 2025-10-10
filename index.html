@@ -7,12 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- New libraries for enhanced features -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     <style>
         :root {
             --primary: #00f5ff;
@@ -250,7 +246,8 @@
 
         .hero-content {
             max-width: 600px;
-            z-index: 1;
+            z-index: 2;
+            position: relative;
         }
 
         .hero h1 {
@@ -269,6 +266,7 @@
             color: var(--primary);
             margin-bottom: 30px;
             font-family: 'Orbitron', sans-serif;
+            min-height: 60px;
         }
 
         .hero p {
@@ -538,11 +536,11 @@
         }
 
         .skill-list li {
-            padding: 10px 0;
+            padding: 15px 0;
             border-bottom: 1px solid rgba(0, 245, 255, 0.1);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .skill-list li:last-child {
@@ -551,21 +549,21 @@
 
         .skill-name {
             color: var(--text);
+            font-weight: 500;
         }
 
         .skill-bar {
-            height: 6px;
+            height: 8px;
             width: 100%;
             background: rgba(0, 245, 255, 0.1);
-            border-radius: 3px;
-            margin-top: 5px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
         .skill-progress {
             height: 100%;
             background: var(--gradient);
-            border-radius: 3px;
+            border-radius: 4px;
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -635,43 +633,213 @@
         .code-string { color: #ce9178; }
         .code-number { color: #b5cea8; }
 
-        /* Enhanced Real-time System Metrics */
-        .metrics {
+        /* NEW: Projects Section */
+        .projects {
             background: var(--dark);
-            padding: 50px 0;
         }
 
-        .metrics-container {
+        .projects .section-title h2 {
+            color: var(--primary);
+        }
+
+        .projects-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
-        .metric-item {
-            text-align: center;
-            padding: 30px;
-            background: rgba(0, 245, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 245, 255, 0.2);
+        .project-card {
+            background: rgba(15, 15, 45, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 245, 255, 0.3);
             transition: var(--transition);
+            position: relative;
         }
 
-        .metric-item:hover {
-            transform: translateY(-5px);
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0,245,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .project-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
             box-shadow: var(--neon-glow);
         }
 
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .project-header {
+            padding: 25px 25px 15px;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .project-company {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .project-period {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .project-content {
+            padding: 20px 25px 25px;
+        }
+
+        .project-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .project-responsibilities {
+            list-style: none;
+        }
+
+        .project-responsibilities li {
+            padding: 8px 0;
+            color: var(--text-light);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .project-responsibilities li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tech-tag {
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            transition: var(--transition);
+        }
+
+        .tech-tag:hover {
+            background: rgba(0, 245, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* NEW: Education Section */
+        .education {
+            background: var(--darker);
+        }
+
+        .education .section-title h2 {
+            color: var(--primary);
+        }
+
+        .education-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .education-card {
+            background: rgba(15, 15, 45, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .education-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0,245,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .education-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .education-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .education-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+
+        .education-degree {
+            font-size: 1.4rem;
             color: var(--primary);
             margin-bottom: 10px;
             font-family: 'Orbitron', sans-serif;
         }
 
-        .metric-label {
+        .education-university {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .education-location {
             color: var(--text-light);
+            margin-bottom: 15px;
             font-size: 0.9rem;
+        }
+
+        .education-year {
+            color: var(--accent);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            background: rgba(255, 45, 117, 0.1);
+            border-radius: 15px;
+            display: inline-block;
+            border: 1px solid rgba(255, 45, 117, 0.3);
         }
 
         /* Enhanced System Architecture Visualization */
@@ -687,6 +855,9 @@
             border: 1px solid rgba(0, 245, 255, 0.3);
             border-radius: 10px;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .arch-node {
@@ -704,6 +875,7 @@
             font-size: 0.8rem;
             text-align: center;
             transition: var(--transition);
+            cursor: pointer;
         }
 
         .arch-node:hover {
@@ -712,15 +884,125 @@
             transform: scale(1.1);
         }
 
-        .arch-connection {
-            position: absolute;
-            background: var(--primary);
-            height: 2px;
-            transform-origin: left center;
-            opacity: 0.5;
+        /* NEW: Tech Gadgets - Mobile Optimized */
+        .tech-gadgets {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
         }
 
-        /* Enhanced Contact Section with Real-time Features */
+        .gadget {
+            width: 60px;
+            height: 60px;
+            background: rgba(15, 15, 45, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            box-shadow: var(--neon-glow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .gadget:hover {
+            transform: scale(1.1);
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        .gadget-tooltip {
+            position: absolute;
+            right: 70px;
+            background: rgba(15, 15, 45, 0.9);
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            color: var(--text);
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .gadget:hover .gadget-tooltip {
+            opacity: 1;
+        }
+
+        /* NEW: Hero Tech Elements - Mobile Optimized */
+        .hero-tech {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 245, 255, 0.05);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            animation: floatElement 15s infinite linear;
+            opacity: 0.7;
+        }
+
+        @keyframes floatElement {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(0) rotate(180deg); }
+            75% { transform: translateY(20px) rotate(270deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .floating-element:nth-child(1) {
+            top: 15%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 65%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        .floating-element:nth-child(4) {
+            top: 35%;
+            right: 20%;
+            animation-delay: 9s;
+        }
+
+        .floating-element:nth-child(5) {
+            bottom: 35%;
+            left: 10%;
+            animation-delay: 12s;
+        }
+
+        /* Enhanced Contact Section */
         .contact {
             background: var(--dark);
         }
@@ -1056,170 +1338,6 @@
             animation: pulse 1s infinite;
         }
 
-        /* NEW: Gesture Navigation */
-        .swipe-indicator {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--text-light);
-            font-size: 0.8rem;
-            z-index: 998;
-            display: none;
-            text-align: center;
-        }
-
-        .swipe-indicator i {
-            margin: 0 5px;
-            color: var(--primary);
-        }
-
-        /* NEW: Interactive Timeline */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: var(--gradient);
-        }
-
-        .timeline-item {
-            display: flex;
-            justify-content: flex-end;
-            padding-right: 30px;
-            position: relative;
-            margin: 40px 0;
-            width: 50%;
-        }
-
-        .timeline-item:nth-child(even) {
-            align-self: flex-end;
-            justify-content: flex-start;
-            padding-left: 30px;
-            padding-right: 0;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            top: 0;
-            right: -10px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid var(--dark);
-            box-shadow: var(--neon-glow);
-        }
-
-        .timeline-item:nth-child(even) .timeline-marker {
-            right: auto;
-            left: -10px;
-        }
-
-        .timeline-content {
-            background: rgba(15, 15, 45, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 245, 255, 0.3);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--neon-glow);
-        }
-
-        .timeline-date {
-            color: var(--primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .timeline-content h3 {
-            color: var(--text);
-            margin-bottom: 5px;
-        }
-
-        .timeline-content h4 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-
-        .timeline-content p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        /* NEW: Parallax Scrolling Elements */
-        .parallax-element {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(0, 245, 255, 0.1);
-            border: 1px solid rgba(0, 245, 255, 0.3);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 2rem;
-            z-index: -1;
-            transition: var(--transition);
-        }
-
-        .parallax-element:hover {
-            background: rgba(0, 245, 255, 0.2);
-            box-shadow: var(--neon-glow);
-        }
-
-        /* NEW: Interactive Skill Charts */
-        .skill-chart {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            position: relative;
-        }
-
-        .chart-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .chart-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .chart-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        /* NEW: Micro-interactions */
-        .micro-interaction {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
         /* Responsive Design */
         @media (max-width: 992px) {
             .about-content {
@@ -1234,27 +1352,43 @@
                 font-size: 3rem;
             }
 
-            .timeline::before {
-                left: 30px;
+            .tech-gadgets {
+                display: none;
             }
 
-            .timeline-item {
-                width: 100%;
-                padding-left: 70px;
-                padding-right: 0;
+            .floating-element {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
             }
 
-            .timeline-item:nth-child(even) {
-                padding-left: 70px;
+            .floating-element:nth-child(1) {
+                top: 10%;
+                left: 2%;
             }
 
-            .timeline-marker {
-                left: 20px;
-                right: auto;
+            .floating-element:nth-child(2) {
+                top: 70%;
+                right: 5%;
             }
 
-            .timeline-item:nth-child(even) .timeline-marker {
-                left: 20px;
+            .floating-element:nth-child(3) {
+                bottom: 10%;
+                left: 10%;
+            }
+
+            .floating-element:nth-child(4) {
+                top: 30%;
+                right: 15%;
+            }
+
+            .floating-element:nth-child(5) {
+                bottom: 30%;
+                left: 5%;
+            }
+
+            .education-container {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1297,6 +1431,7 @@
 
             .typing-text {
                 font-size: 1.2rem;
+                min-height: 50px;
             }
 
             .section-title h2 {
@@ -1312,8 +1447,22 @@
                 gap: 30px;
             }
 
-            .swipe-indicator {
-                display: block;
+            .floating-element {
+                display: none;
+            }
+
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn-outline {
+                margin-left: 0;
+            }
+
+            .education-card {
+                padding: 20px;
             }
         }
 
@@ -1337,6 +1486,22 @@
             .terminal {
                 padding: 20px;
             }
+
+            .skill-category {
+                padding: 20px;
+            }
+
+            .projects-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 20px;
+            }
+
+            .education-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -1350,11 +1515,31 @@
     <!-- NEW: 3D Element Container -->
     <div class="three-d-container" id="threeContainer"></div>
     
+    <!-- NEW: Tech Gadgets - Hidden on Mobile -->
+    <div class="tech-gadgets">
+        <div class="gadget">
+            <i class="fas fa-code"></i>
+            <div class="gadget-tooltip">Code Repository</div>
+        </div>
+        <div class="gadget">
+            <i class="fas fa-server"></i>
+            <div class="gadget-tooltip">System Status</div>
+        </div>
+        <div class="gadget">
+            <i class="fas fa-network-wired"></i>
+            <div class="gadget-tooltip">Network Monitor</div>
+        </div>
+        <div class="gadget">
+            <i class="fas fa-terminal"></i>
+            <div class="gadget-tooltip">Terminal Access</div>
+        </div>
+    </div>
+
     <!-- Enhanced Header -->
     <header id="header">
         <div class="container">
             <div class="nav-container">
-                <a href="#" class="logo">VK<span>_</span></a>
+                <a href="#" class="logo">V K<span></span></a>
                 <div class="mobile-menu" id="mobileMenu">
                     <i class="fas fa-bars"></i>
                 </div>
@@ -1363,6 +1548,8 @@
                     <li><a href="#about">About</a></li>
                     <li><a href="#skills">Skills</a></li>
                     <li><a href="#sde-skills">SDE Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#education">Education</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -1383,15 +1570,23 @@
             </div>
         </div>
         
-        <!-- NEW: Parallax Elements -->
-        <div class="parallax-element" style="top: 20%; left: 10%;" data-speed="0.2">
-            <i class="fas fa-server"></i>
-        </div>
-        <div class="parallax-element" style="top: 60%; right: 15%;" data-speed="0.3">
-            <i class="fas fa-code"></i>
-        </div>
-        <div class="parallax-element" style="bottom: 20%; left: 20%;" data-speed="0.4">
-            <i class="fas fa-cloud"></i>
+        <!-- NEW: Hero Tech Elements - Optimized for Mobile -->
+        <div class="hero-tech">
+            <div class="floating-element">
+                <i class="fas fa-server"></i>
+            </div>
+            <div class="floating-element">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <div class="floating-element">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="floating-element">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="floating-element">
+                <i class="fas fa-network-wired"></i>
+            </div>
         </div>
     </section>
 
@@ -1408,10 +1603,6 @@
                     <p>I'm a passionate SDE/SRE/DevOps Engineer with expertise in designing, building, and maintaining scalable systems. My journey in technology has taken me through various domains, from backend development to infrastructure automation.</p>
                     <p>I thrive in challenging environments where I can apply my problem-solving skills to create efficient, reliable solutions. My approach combines technical expertise with a focus on user experience and business value.</p>
                     <div class="stats">
-                        <!--<div class="stat-item">-->
-                        <!--    <div class="stat-number" id="projectsCount">50+</div>-->
-                        <!--    <div class="stat-text">Projects Completed</div>-->
-                        <!--</div>-->
                         <div class="stat-item">
                             <div class="stat-number" id="experienceYears">8+</div>
                             <div class="stat-text">Years Experience</div>
@@ -1423,7 +1614,19 @@
                     </div>
                 </div>
                 <div class="about-visual">
-                  
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <h3>System Information</h3>
+                        </div>
+                        <div class="terminal-content">
+                            <p><span style="color: var(--primary);">$</span> whoami</p>
+                            <p>Vinay Kumar - SDE/SRE/DevOps Engineer</p>
+                            <p><span style="color: var(--primary);">$</span> cat experience.txt</p>
+                            <p>Cloud Infrastructure | Automation | CI/CD | Kubernetes | Docker</p>
+                            <p><span style="color: var(--primary);">$</span> find /skills -name "cloud"</p>
+                            <p>AWS | Azure | GCP | Terraform | Ansible</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1459,7 +1662,13 @@
                             </div>
                         </li>
                         <li>
-                            <span class="skill-name">Go</span>
+                            <span class="skill-name">SQL</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="skill-name">PL/SQL</span>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-width="80"></div>
                             </div>
@@ -1493,10 +1702,22 @@
                                 <div class="skill-progress" data-width="80"></div>
                             </div>
                         </li>
+                        <li>
+                            <span class="skill-name">Azure</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="75"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="skill-name">Ansible</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="70"></div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="skill-category">
-                    <h3><i class="fas fa-database"></i> Databases</h3>
+                    <h3><i class="fas fa-database"></i> Databases & Tools</h3>
                     <ul class="skill-list">
                         <li>
                             <span class="skill-name">MySQL</span>
@@ -1517,9 +1738,21 @@
                             </div>
                         </li>
                         <li>
-                            <span class="skill-name">Redis</span>
+                            <span class="skill-name">Oracle</span>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-width="85"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="skill-name">Git</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="skill-name">Jenkins</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80"></div>
                             </div>
                         </li>
                     </ul>
@@ -1563,94 +1796,145 @@
                     <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
                 </div>
             </div>
-            
-            <!-- NEW: Interactive Timeline -->
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2022 - Present</span>
-                        <h3>SDE/Cloud Engineer</h3>
-                        <h4>Capital One</h4>
-                        <p>Leading vulnerability management initiatives, implementing security testing frameworks, and developing cloud-native applications with microservices architecture.</p>
-                        <p>Managed end-to-end production support for critical financial applications with 99.9% uptime SLA</p>
-                        <p>Performed root cause analysis for production incidents and implemented preventive measures</p>
-                        <p>Monitoring dashboards using Grafana and New Relic for real-time system visibility</p>
-                        <p>Remediated critical and high-level vulnerabilities across multiple applications and programming languages</p>
-                        <p>Implemented automated CI/CD pipelines reducing deployment time by 60%</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2021 - 2022</span>
-                        <h3>SDE Engineer</h3>
-                        <h4>WASTE MANAGEMENT</h4>
-                        <p>Managed production support for Smart-Truck application handling millions of records daily</p>
-                        <p>Implemented AWS Lambda functions for automated data processing and validation</p>
-                        <p>Designed and deployed microservices architecture using Spring Boot and Docker</p>
-                        <p>Set up comprehensive monitoring using CloudWatch and custom metric</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2020 - 2021</span>
-                        <h3>SDE/Cyber Security</h3>
-                        <h4>Capital One</h4>
-                        <p>Responsibility for managing the end-to-end vulnerability management</p>
-                        <p>Scanning and identifying vulnerabilities associated with Capital One applications connected to the network</p>
-                        <p>Remediation of security vulnerabilities (e.g., OS/Application Patching, Static and Dynamic Application Security Testing)</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2017 - 2019</span>
-                        <h3>Software Engineer</h3>
-                        <h4>CERNER</h4>
-                        <p>Built RESTful APIs and database schemas for early-stage products, gaining experience in full development lifecycle.</p>
-                        <p>Provided production support for healthcare applications following HIPAA compliance</p>
-                        <p>Developed real-time monitoring solutions for healthcare data management systems</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Enhanced Real-time System Metrics -->
-    <section class="metrics">
-        <div class="container">
-            <div class="metrics-container">
-                <div class="metric-item">
-                    <div class="metric-value" id="uptimeMetric">99.9%</div>
-                    <div class="metric-label">System Uptime</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" id="responseMetric">45ms</div>
-                    <div class="metric-label">Avg Response Time</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" id="throughputMetric">2.5M</div>
-                    <div class="metric-label">Requests/Day</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" id="deploymentMetric">15</div>
-                    <div class="metric-label">Deployments/Month</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Enhanced System Architecture Visualization -->
-    <section class="architecture">
+    <!-- NEW: Projects Section -->
+    <section id="projects" class="projects">
         <div class="container">
             <div class="section-title">
-                <h2>System Architecture</h2>
-                <p>Visual representation of scalable system design</p>
+                <h2>Professional Projects</h2>
+                <p>Key projects and roles throughout my career</p>
             </div>
-            <div class="arch-diagram" id="archDiagram">
-                <!-- Architecture nodes will be dynamically added -->
+            <div class="projects-container">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Cloud Infrastructure & Automation</h3>
+                        <div class="project-company">SDE/Cloud Engineer - Capital One</div>
+                        <div class="project-period">2022 - Present</div>
+                    </div>
+                    <div class="project-content">
+                        <p class="project-description">Leading vulnerability management initiatives, implementing security testing frameworks, and developing cloud-native applications with microservices architecture.</p>
+                        <ul class="project-responsibilities">
+                            <li>Managed end-to-end production support for critical financial applications with 99.9% uptime SLA</li>
+                            <li>Performed root cause analysis for production incidents and implemented preventive measures</li>
+                            <li>Monitoring dashboards using Grafana and New Relic for real-time system visibility</li>
+                            <li>Remediated critical and high-level vulnerabilities across multiple applications</li>
+                            <li>Implemented automated CI/CD pipelines reducing deployment time by 60%</li>
+                        </ul>
+                        <div class="project-tech">
+                            <span class="tech-tag">AWS</span>
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">Terraform</span>
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Grafana</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Smart-Truck Application</h3>
+                        <div class="project-company">SDE Engineer - WASTE MANAGEMENT</div>
+                        <div class="project-period">2021 - 2022</div>
+                    </div>
+                    <div class="project-content">
+                        <p class="project-description">Managed production support for Smart-Truck application handling millions of records daily with focus on performance and reliability.</p>
+                        <ul class="project-responsibilities">
+                            <li>Implemented AWS Lambda functions for automated data processing and validation</li>
+                            <li>Designed and deployed microservices architecture using Spring Boot and Docker</li>
+                            <li>Set up comprehensive monitoring using CloudWatch and custom metrics</li>
+                            <li>Optimized database queries improving system performance by 40%</li>
+                        </ul>
+                        <div class="project-tech">
+                            <span class="tech-tag">AWS Lambda</span>
+                            <span class="tech-tag">Spring Boot</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">CloudWatch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Vulnerability Management</h3>
+                        <div class="project-company">SDE/Cyber Security - Capital One</div>
+                        <div class="project-period">2020 - 2021</div>
+                    </div>
+                    <div class="project-content">
+                        <p class="project-description">Responsibility for managing the end-to-end vulnerability management process for enterprise applications.</p>
+                        <ul class="project-responsibilities">
+                            <li>Scanning and identifying vulnerabilities associated with Capital One applications</li>
+                            <li>Remediation of security vulnerabilities (OS/Application Patching, SAST/DAST)</li>
+                            <li>Implemented automated security scanning in CI/CD pipelines</li>
+                            <li>Developed security dashboards for vulnerability tracking and reporting</li>
+                        </ul>
+                        <div class="project-tech">
+                            <span class="tech-tag">Security</span>
+                            <span class="tech-tag">SAST/DAST</span>
+                            <span class="tech-tag">CI/CD</span>
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Automation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Healthcare Data Management</h3>
+                        <div class="project-company">Software Engineer - CERNER</div>
+                        <div class="project-period">2017 - 2019</div>
+                    </div>
+                    <div class="project-content">
+                        <p class="project-description">Built RESTful APIs and database schemas for healthcare applications, gaining experience in full development lifecycle.</p>
+                        <ul class="project-responsibilities">
+                            <li>Provided production support for healthcare applications following HIPAA compliance</li>
+                            <li>Developed real-time monitoring solutions for healthcare data management systems</li>
+                            <li>Optimized database performance for large-scale healthcare data</li>
+                            <li>Implemented data validation and security measures for sensitive health information</li>
+                        </ul>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">REST APIs</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">HIPAA</span>
+                            <span class="tech-tag">Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Education Section -->
+    <section id="education" class="education">
+        <div class="container">
+            <div class="section-title">
+                <h2>Education</h2>
+                <p>Academic background and qualifications</p>
+            </div>
+            <div class="education-container">
+                <div class="education-card">
+                    <div class="education-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="education-degree">Masters in Computer Science and Engineering</h3>
+                    <p class="education-university">San Francisco Bay University</p>
+                    <p class="education-location">USA</p>
+                    <span class="education-year">Graduation: 2016</span>
+                </div>
+                <div class="education-card">
+                    <div class="education-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="education-degree">Bachelors in Information Technology</h3>
+                    <p class="education-university">JNTU University of Hyderabad</p>
+                    <p class="education-location">India</p>
+                    <span class="education-year">Graduation: 2014</span>
+                </div>
             </div>
         </div>
     </section>
@@ -1747,7 +2031,7 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="logo">Vinay Kumar<span>_</span></div>
+                <div class="logo">Vinay Kumar<span></span></div>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-github"></i></a>
                     <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -1769,13 +2053,6 @@
     <!-- NEW: Voice Command Interface -->
     <div class="voice-command" id="voiceCommand">
         <i class="fas fa-microphone"></i>
-    </div>
-
-    <!-- NEW: Gesture Navigation Indicator -->
-    <div class="swipe-indicator" id="swipeIndicator">
-        <i class="fas fa-arrow-left"></i>
-        Swipe to navigate
-        <i class="fas fa-arrow-right"></i>
     </div>
 
     <!-- Enhanced Data Stream Visualization -->
@@ -1902,7 +2179,7 @@
         gsap.registerPlugin(ScrollTrigger);
         
         // Animate elements on scroll
-        gsap.utils.toArray('.terminal, .skill-category, .stat-item, .contact-item').forEach(element => {
+        gsap.utils.toArray('.terminal, .skill-category, .stat-item, .contact-item, .project-card, .education-card').forEach(element => {
             gsap.from(element, {
                 scrollTrigger: {
                     trigger: element,
@@ -1934,48 +2211,6 @@
             });
         });
 
-        // Enhanced Parallax Scrolling
-        const parallaxElements = document.querySelectorAll('.parallax-element');
-        
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            
-            parallaxElements.forEach(element => {
-                const speed = element.getAttribute('data-speed') || 0.2;
-                const yPos = -(scrollY * speed);
-                element.style.transform = `translateY(${yPos}px)`;
-            });
-        });
-
-        // Enhanced Real-time Metrics
-        function updateMetrics() {
-            const uptime = document.getElementById('uptimeMetric');
-            const response = document.getElementById('responseMetric');
-            const throughput = document.getElementById('throughputMetric');
-            const deployment = document.getElementById('deploymentMetric');
-            
-            // Simulate real-time metric updates
-            setInterval(() => {
-                // Uptime metric (fluctuates slightly around 99.9%)
-                const uptimeValue = 99.9 + (Math.random() * 0.1 - 0.05);
-                uptime.textContent = uptimeValue.toFixed(1) + '%';
-                
-                // Response time metric
-                const responseValue = 40 + Math.random() * 10;
-                response.textContent = Math.round(responseValue) + 'ms';
-                
-                // Throughput metric
-                const throughputValue = 2.5 + (Math.random() * 0.5 - 0.25);
-                throughput.textContent = throughputValue.toFixed(1) + 'M';
-                
-                // Deployment metric
-                const deploymentValue = 15 + Math.floor(Math.random() * 5);
-                deployment.textContent = deploymentValue;
-            }, 2000);
-        }
-        
-        updateMetrics();
-
         // Enhanced System Architecture Visualization
         function createArchitectureDiagram() {
             const diagram = document.getElementById('archDiagram');
@@ -2006,26 +2241,6 @@
             
             // Create connections (simplified for demo)
             setTimeout(() => {
-                const connections = [
-                    { from: 'Load Balancer', to: 'API Gateway' },
-                    { from: 'API Gateway', to: 'Auth Service' },
-                    { from: 'API Gateway', to: 'User Service' },
-                    { from: 'API Gateway', to: 'Product Service' },
-                    { from: 'API Gateway', to: 'Order Service' },
-                    { from: 'User Service', to: 'Database' },
-                    { from: 'Product Service', to: 'Database' },
-                    { from: 'Order Service', to: 'Database' },
-                    { from: 'User Service', to: 'Cache' },
-                    { from: 'Product Service', to: 'Cache' },
-                    { from: 'Auth Service', to: 'Message Queue' },
-                    { from: 'Order Service', to: 'Message Queue' },
-                    { from: 'Database', to: 'Monitoring' },
-                    { from: 'Cache', to: 'Monitoring' },
-                    { from: 'Message Queue', to: 'Monitoring' }
-                ];
-                
-                // In a real implementation, we would draw SVG lines between nodes
-                // For this demo, we'll just animate the nodes
                 gsap.to('.arch-node', {
                     y: -10,
                     duration: 2,
@@ -2112,206 +2327,34 @@
 
         // NEW: Voice Command Interface
         const voiceCommand = document.getElementById('voiceCommand');
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        
-        recognition.continuous = false;
-        recognition.interimResults = false;
         
         voiceCommand.addEventListener('click', () => {
             if (voiceCommand.classList.contains('listening')) {
-                recognition.stop();
                 voiceCommand.classList.remove('listening');
             } else {
-                recognition.start();
                 voiceCommand.classList.add('listening');
-            }
-        });
-        
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript.toLowerCase();
-            voiceCommand.classList.remove('listening');
-            
-            // Process voice commands
-            if (transcript.includes('home') || transcript.includes('start')) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (transcript.includes('about') || transcript.includes('who')) {
-                document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-            } else if (transcript.includes('skills') || transcript.includes('what can you do')) {
-                document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
-            } else if (transcript.includes('contact') || transcript.includes('get in touch')) {
-                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-            } else if (transcript.includes('projects') || transcript.includes('work')) {
-                document.getElementById('sde-skills').scrollIntoView({ behavior: 'smooth' });
-            }
-            
-            // Show voice feedback
-            responseSystem.classList.add('active');
-            responseContent.textContent = `Voice command recognized: "${transcript}"`;
-            
-            setTimeout(() => {
-                responseSystem.classList.remove('active');
-            }, 3000);
-        };
-        
-        recognition.onerror = () => {
-            voiceCommand.classList.remove('listening');
-        };
-
-        // NEW: Three.js 3D Background
-        function initThreeJS() {
-            const container = document.getElementById('threeContainer');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-            
-            // Create a simple geometry for demonstration
-            const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-            const material = new THREE.MeshBasicMaterial({ 
-                color: 0x00f5ff, 
-                wireframe: true,
-                transparent: true,
-                opacity: 0.1
-            });
-            const torus = new THREE.Mesh(geometry, material);
-            scene.add(torus);
-            
-            camera.position.z = 25;
-            
-            // Animation
-            function animate() {
-                requestAnimationFrame(animate);
                 
-                torus.rotation.x += 0.005;
-                torus.rotation.y += 0.01;
+                // Show voice feedback
+                responseSystem.classList.add('active');
+                responseContent.textContent = "Voice command activated. Say 'about', 'skills', 'projects', or 'contact' to navigate.";
                 
-                renderer.render(scene, camera);
+                setTimeout(() => {
+                    responseSystem.classList.remove('active');
+                    voiceCommand.classList.remove('listening');
+                }, 3000);
             }
-            
-            animate();
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        }
-        
-        // Initialize Three.js if available
-        if (THREE) {
-            initThreeJS();
-        }
-
-        // NEW: Interactive Skill Charts
-        function createSkillCharts() {
-            const backendChart = document.getElementById('backendChart').querySelector('canvas');
-            const backendCtx = backendChart.getContext('2d');
-            
-            // Create a simple donut chart
-            const centerX = backendChart.width / 2;
-            const centerY = backendChart.height / 2;
-            const radius = Math.min(centerX, centerY) - 10;
-            
-            // Draw background circle
-            backendCtx.beginPath();
-            backendCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            backendCtx.strokeStyle = 'rgba(0, 245, 255, 0.2)';
-            backendCtx.lineWidth = 10;
-            backendCtx.stroke();
-            
-            // Draw progress circle
-            backendCtx.beginPath();
-            backendCtx.arc(centerX, centerY, radius, -0.5 * Math.PI, (1.5 * Math.PI) * 0.9);
-            backendCtx.strokeStyle = '#00f5ff';
-            backendCtx.lineWidth = 10;
-            backendCtx.stroke();
-        }
-        
-        createSkillCharts();
-
-        // NEW: Gesture Navigation for Mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            
-            if (touchEndX < touchStartX - swipeThreshold) {
-                // Swipe left - go to next section
-                navigateSections('next');
-            } else if (touchEndX > touchStartX + swipeThreshold) {
-                // Swipe right - go to previous section
-                navigateSections('prev');
-            }
-        }
-        
-        function navigateSections(direction) {
-            const sections = document.querySelectorAll('section');
-            const currentSection = Array.from(sections).find(section => {
-                const rect = section.getBoundingClientRect();
-                return rect.top >= 0 && rect.top < window.innerHeight / 2;
-            });
-            
-            if (!currentSection) return;
-            
-            let targetSection;
-            const currentIndex = Array.from(sections).indexOf(currentSection);
-            
-            if (direction === 'next' && currentIndex < sections.length - 1) {
-                targetSection = sections[currentIndex + 1];
-            } else if (direction === 'prev' && currentIndex > 0) {
-                targetSection = sections[currentIndex - 1];
-            }
-            
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // NEW: Micro-interactions
-        document.addEventListener('click', e => {
-            // Create a ripple effect
-            const ripple = document.createElement('div');
-            ripple.className = 'micro-interaction';
-            ripple.style.width = '20px';
-            ripple.style.height = '20px';
-            ripple.style.borderRadius = '50%';
-            ripple.style.background = 'rgba(0, 245, 255, 0.5)';
-            ripple.style.left = `${e.clientX - 10}px`;
-            ripple.style.top = `${e.clientY - 10}px`;
-            
-            document.body.appendChild(ripple);
-            
-            // Animate the ripple
-            gsap.to(ripple, {
-                width: 100,
-                height: 100,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power2.out',
-                onComplete: () => ripple.remove()
-            });
         });
 
         // Initialize all enhanced features when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             // Animate skill bars
             animateSkillBars();
-            
-            // Initialize tooltips if needed
-            // Initialize any other interactive elements
+        });
+
+        // Handle window resize for matrix canvas
+        window.addEventListener('resize', () => {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
         });
     </script>
 </body>
